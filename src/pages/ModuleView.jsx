@@ -53,11 +53,57 @@ export default function ModuleView() {
     enabled: !!user?.email,
   });
 
+  const { data: allBadges = [] } = useQuery({
+    queryKey: ['badges'],
+    queryFn: () => base44.entities.Badge.list(),
+  });
+
+  const checkAndAwardBadges = async (updatedProgress) => {
+    const currentBadgeIds = updatedProgress.badges || [];
+    const newBadges = [];
+
+    for (const badge of allBadges) {
+      if (currentBadgeIds.includes(badge.id)) continue;
+
+      let shouldAward = false;
+      
+      switch (badge.requirement_type) {
+        case 'modules_completed':
+          shouldAward = (updatedProgress.modules_completed?.length || 0) >= badge.requirement_value;
+          break;
+        case 'streak':
+          shouldAward = (updatedProgress.current_streak || 0) >= badge.requirement_value;
+          break;
+        case 'voice_notes':
+          shouldAward = (updatedProgress.voice_notes_count || 0) >= badge.requirement_value;
+          break;
+        case 'points':
+          shouldAward = (updatedProgress.total_points || 0) >= badge.requirement_value;
+          break;
+      }
+
+      if (shouldAward) {
+        newBadges.push(badge.id);
+      }
+    }
+
+    if (newBadges.length > 0) {
+      const allBadgeIds = [...currentBadgeIds, ...newBadges];
+      await base44.entities.UserProgress.update(updatedProgress.id, {
+        badges: allBadgeIds,
+      });
+      return newBadges;
+    }
+
+    return [];
+  };
+
   const updateProgressMutation = useMutation({
     mutationFn: async (data) => {
       if (!user?.email) return;
       
       const today = new Date().toISOString().split('T')[0];
+      let updatedProgress;
       
       if (userProgress) {
         const modulesCompleted = [...new Set([...(userProgress.modules_completed || []), moduleId])];
@@ -75,15 +121,22 @@ export default function ModuleView() {
           }
         }
 
-        await base44.entities.UserProgress.update(userProgress.id, {
+        const updateData = {
           modules_completed: modulesCompleted,
           current_streak: newStreak,
           longest_streak: Math.max(newStreak, userProgress.longest_streak || 0),
           last_activity_date: today,
           total_points: (userProgress.total_points || 0) + 10,
-        });
+        };
+
+        await base44.entities.UserProgress.update(userProgress.id, updateData);
+        
+        updatedProgress = {
+          ...userProgress,
+          ...updateData,
+        };
       } else {
-        await base44.entities.UserProgress.create({
+        const createData = {
           user_email: user.email,
           user_name: user.full_name,
           modules_completed: [moduleId],
@@ -93,10 +146,16 @@ export default function ModuleView() {
           total_points: 10,
           badges: [],
           decks_viewed: [],
-        });
+        };
+        
+        const created = await base44.entities.UserProgress.create(createData);
+        updatedProgress = created;
       }
+
+      const newBadges = await checkAndAwardBadges(updatedProgress);
+      return { newBadges };
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       queryClient.invalidateQueries(['userProgress']);
       setIsComplete(true);
     },
