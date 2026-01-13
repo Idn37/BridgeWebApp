@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { 
   Users, BookOpen, Mic, TrendingUp, 
   CheckCircle, Clock, Play, ChevronRight, Flame,
@@ -57,6 +58,13 @@ export default function AdminDashboard() {
     },
   });
 
+  const deleteVoiceNoteMutation = useMutation({
+    mutationFn: (noteId) => base44.entities.VoiceNote.delete(noteId),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['voiceNotes']);
+    },
+  });
+
   // Calculate stats
   const activeUsers = allProgress.filter(p => {
     if (!p.last_activity_date) return false;
@@ -72,6 +80,7 @@ export default function AdminDashboard() {
     : 0;
 
   const pendingVoiceNotes = voiceNotes.filter(v => !v.is_approved);
+  const approvedVoiceNotes = voiceNotes.filter(v => v.is_approved);
 
   const getModuleEngagement = (moduleId) => {
     return allProgress.filter(p => p.modules_completed?.includes(moduleId)).length;
@@ -162,14 +171,25 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
                     <Mic className="w-5 h-5 text-violet-500" />
-                    Voice Notes - Pending Approval
+                    Voice Notes Manager
                   </CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
-                <ScrollArea className="h-96">
-                  <div className="space-y-3">
-                    {pendingVoiceNotes.map((note, idx) => (
+                <Tabs defaultValue="pending" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2 mb-4">
+                    <TabsTrigger value="pending">
+                      Pending ({pendingVoiceNotes.length})
+                    </TabsTrigger>
+                    <TabsTrigger value="approved">
+                      Approved ({approvedVoiceNotes.length})
+                    </TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="pending">
+                    <ScrollArea className="h-96">
+                      <div className="space-y-3">
+                        {pendingVoiceNotes.map((note, idx) => (
                       <motion.div
                         key={note.id}
                         initial={{ opacity: 0, x: -10 }}
@@ -231,14 +251,84 @@ export default function AdminDashboard() {
                       </motion.div>
                     ))}
 
-                    {pendingVoiceNotes.length === 0 && (
-                      <div className="text-center py-12 text-slate-500">
-                        <CheckCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                        <p>All voice notes reviewed!</p>
+                        {pendingVoiceNotes.length === 0 && (
+                          <div className="text-center py-12 text-slate-500">
+                            <CheckCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                            <p>All voice notes reviewed!</p>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </ScrollArea>
+                    </ScrollArea>
+                  </TabsContent>
+
+                  <TabsContent value="approved">
+                    <ScrollArea className="h-96">
+                      <div className="space-y-3">
+                        {approvedVoiceNotes.map((note, idx) => (
+                          <motion.div
+                            key={note.id}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: idx * 0.05 }}
+                            className="p-4 bg-slate-50 rounded-xl border border-slate-200"
+                          >
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-start gap-3 flex-1">
+                                <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                                  <CheckCircle className="w-5 h-5 text-emerald-600" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-semibold text-slate-900">
+                                    {note.contributor_name || 'Anonymous'}
+                                  </p>
+                                  <p className="text-xs text-slate-500 mb-1">
+                                    {getModuleName(note.module_id)}
+                                  </p>
+                                  <p className="text-xs text-slate-400">
+                                    {note.duration_seconds}s • {format(new Date(note.created_date), 'MMM d, h:mm a')}
+                                  </p>
+                                </div>
+                              </div>
+                              <Badge className="bg-emerald-100 text-emerald-700 border-0">
+                                Approved
+                              </Badge>
+                            </div>
+                            
+                            <audio 
+                              src={note.audio_url} 
+                              controls 
+                              className="w-full mb-3 h-10"
+                              style={{ maxHeight: '40px' }}
+                            />
+
+                            {note.transcript && (
+                              <p className="text-sm text-slate-600 mb-3 bg-white p-3 rounded-lg border border-slate-100">
+                                "{note.transcript}"
+                              </p>
+                            )}
+
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => deleteVoiceNoteMutation.mutate(note.id)}
+                              className="w-full text-red-600 border-red-200 hover:bg-red-50"
+                            >
+                              <X className="w-4 h-4 mr-1" />
+                              Delete
+                            </Button>
+                          </motion.div>
+                        ))}
+
+                        {approvedVoiceNotes.length === 0 && (
+                          <div className="text-center py-12 text-slate-500">
+                            <Mic className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                            <p>No approved voice notes yet</p>
+                          </div>
+                        )}
+                      </div>
+                    </ScrollArea>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           </motion.div>
