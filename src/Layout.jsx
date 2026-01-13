@@ -10,7 +10,7 @@ const staffNavItems = [
 ];
 
 const trainerNavItems = [
-  { name: 'Dashboard', icon: Home, page: 'TrainerDashboard' },
+  { name: 'Dashboard', icon: Home, page: 'AdminDashboard' },
   { name: 'Modules', icon: BookOpen, page: 'ManageModules' },
 ];
 

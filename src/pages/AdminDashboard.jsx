@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
-  Users, BookOpen, Mic, TrendingUp, Calendar, 
+  Users, BookOpen, Mic, TrendingUp, 
   CheckCircle, Clock, Play, ChevronRight, Flame,
-  Eye, MessageSquare, Award, BarChart3
+  Eye, MessageSquare, Award, BarChart3, Check, X
 } from 'lucide-react';
-import { format, isToday, isTomorrow, isThisWeek } from 'date-fns';
+import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
-export default function TrainerDashboard() {
+export default function AdminDashboard() {
   const [user, setUser] = useState(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -35,12 +35,26 @@ export default function TrainerDashboard() {
 
   const { data: voiceNotes = [] } = useQuery({
     queryKey: ['voiceNotes'],
-    queryFn: () => base44.entities.VoiceNote.list('-created_date', 20),
+    queryFn: () => base44.entities.VoiceNote.list('-created_date', 50),
   });
 
   const { data: decks = [] } = useQuery({
     queryKey: ['allDecks'],
     queryFn: () => base44.entities.Deck.list(),
+  });
+
+  const approveVoiceNoteMutation = useMutation({
+    mutationFn: (noteId) => base44.entities.VoiceNote.update(noteId, { is_approved: true }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['voiceNotes']);
+    },
+  });
+
+  const rejectVoiceNoteMutation = useMutation({
+    mutationFn: (noteId) => base44.entities.VoiceNote.delete(noteId),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['voiceNotes']);
+    },
   });
 
   // Calculate stats
@@ -57,27 +71,19 @@ export default function TrainerDashboard() {
     ? Math.round(allProgress.reduce((sum, p) => sum + (p.current_streak || 0), 0) / allProgress.length)
     : 0;
 
-  const upcomingSessions = modules
-    .filter(m => m.session_date && new Date(m.session_date) > new Date())
-    .sort((a, b) => new Date(a.session_date) - new Date(b.session_date))
-    .slice(0, 5);
-
   const pendingVoiceNotes = voiceNotes.filter(v => !v.is_approved);
-
-  const getSessionLabel = (date) => {
-    const d = new Date(date);
-    if (isToday(d)) return 'Today';
-    if (isTomorrow(d)) return 'Tomorrow';
-    if (isThisWeek(d)) return format(d, 'EEEE');
-    return format(d, 'MMM d');
-  };
 
   const getModuleEngagement = (moduleId) => {
     return allProgress.filter(p => p.modules_completed?.includes(moduleId)).length;
   };
 
+  const getModuleName = (moduleId) => {
+    const module = modules.find(m => m.id === moduleId);
+    return module?.title || 'Unknown Module';
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white pb-24">
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <motion.div
@@ -85,8 +91,8 @@ export default function TrainerDashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-bold text-slate-900 mb-1">Trainer Dashboard</h1>
-          <p className="text-slate-500">Monitor staff engagement and manage training content</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-1">Admin Dashboard</h1>
+          <p className="text-slate-500">Monitor staff engagement and manage content</p>
         </motion.div>
 
         {/* Stats Grid */}
@@ -144,7 +150,7 @@ export default function TrainerDashboard() {
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Upcoming Sessions */}
+          {/* Voice Notes Management */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -155,138 +161,128 @@ export default function TrainerDashboard() {
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Calendar className="w-5 h-5 text-violet-500" />
-                    Upcoming Sessions
+                    <Mic className="w-5 h-5 text-violet-500" />
+                    Voice Notes - Pending Approval
                   </CardTitle>
-                  <Link to={createPageUrl('ManageModules')}>
-                    <Button variant="ghost" size="sm" className="text-violet-600">
-                      Manage All <ChevronRight className="w-4 h-4 ml-1" />
-                    </Button>
-                  </Link>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {upcomingSessions.map((module, idx) => {
-                    const engagement = getModuleEngagement(module.id);
-                    const totalStaff = allProgress.length || 1;
-                    const engagementPercent = Math.round((engagement / totalStaff) * 100);
-
-                    return (
+                <ScrollArea className="h-96">
+                  <div className="space-y-3">
+                    {pendingVoiceNotes.map((note, idx) => (
                       <motion.div
-                        key={module.id}
+                        key={note.id}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.05 }}
-                        className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors"
+                        className="p-4 bg-slate-50 rounded-xl border border-slate-200"
                       >
-                        <div className="flex-shrink-0">
-                          <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex flex-col items-center justify-center">
-                            <span className="text-xs text-slate-500">{format(new Date(module.session_date), 'MMM')}</span>
-                            <span className="text-lg font-bold text-slate-900">{format(new Date(module.session_date), 'd')}</span>
-                          </div>
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-slate-900 truncate">{module.title}</h4>
-                          <div className="flex items-center gap-3 mt-1">
-                            <Badge variant="outline" className="text-xs capitalize">
-                              {module.category?.replace('_', ' ')}
-                            </Badge>
-                            <span className="text-xs text-slate-500">
-                              {getSessionLabel(module.session_date)}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="text-right">
-                          <div className="flex items-center gap-1.5 mb-1">
-                            <Eye className="w-4 h-4 text-slate-400" />
-                            <span className="font-semibold text-slate-900">{engagementPercent}%</span>
-                          </div>
-                          <p className="text-xs text-slate-500">prepared</p>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-
-                  {upcomingSessions.length === 0 && (
-                    <div className="text-center py-8 text-slate-500">
-                      <Calendar className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                      <p>No upcoming sessions scheduled</p>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Voice Notes Vault */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Card className="border-0 shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Mic className="w-5 h-5 text-violet-500" />
-                  Voice Vault
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-80">
-                  <div className="space-y-3">
-                    {voiceNotes.slice(0, 10).map((note, idx) => (
-                      <motion.div
-                        key={note.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: idx * 0.05 }}
-                        className="p-3 bg-slate-50 rounded-lg"
-                      >
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center">
-                              <Mic className="w-4 h-4 text-violet-600" />
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-start gap-3 flex-1">
+                            <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
+                              <Mic className="w-5 h-5 text-violet-600" />
                             </div>
-                            <div>
-                              <p className="text-sm font-medium text-slate-900">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-semibold text-slate-900">
                                 {note.contributor_name || 'Anonymous'}
                               </p>
-                              <p className="text-xs text-slate-500">
-                                {note.duration_seconds}s • {format(new Date(note.created_date), 'MMM d')}
+                              <p className="text-xs text-slate-500 mb-1">
+                                {getModuleName(note.module_id)}
+                              </p>
+                              <p className="text-xs text-slate-400">
+                                {note.duration_seconds}s • {format(new Date(note.created_date), 'MMM d, h:mm a')}
                               </p>
                             </div>
                           </div>
-                          {note.is_approved ? (
-                            <Badge className="bg-emerald-100 text-emerald-700 border-0">
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              Approved
-                            </Badge>
-                          ) : (
-                            <Badge className="bg-amber-100 text-amber-700 border-0">
-                              <Clock className="w-3 h-3 mr-1" />
-                              Pending
-                            </Badge>
-                          )}
                         </div>
+                        
+                        <audio 
+                          src={note.audio_url} 
+                          controls 
+                          className="w-full mb-3 h-10"
+                          style={{ maxHeight: '40px' }}
+                        />
+
                         {note.transcript && (
-                          <p className="text-xs text-slate-600 line-clamp-2 pl-10">
+                          <p className="text-sm text-slate-600 mb-3 bg-white p-3 rounded-lg border border-slate-100">
                             "{note.transcript}"
                           </p>
                         )}
+
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => approveVoiceNoteMutation.mutate(note.id)}
+                            className="flex-1 bg-emerald-500 hover:bg-emerald-600"
+                          >
+                            <Check className="w-4 h-4 mr-1" />
+                            Approve
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => rejectVoiceNoteMutation.mutate(note.id)}
+                            className="flex-1 text-red-600 border-red-200 hover:bg-red-50"
+                          >
+                            <X className="w-4 h-4 mr-1" />
+                            Reject
+                          </Button>
+                        </div>
                       </motion.div>
                     ))}
 
-                    {voiceNotes.length === 0 && (
-                      <div className="text-center py-8 text-slate-500">
-                        <Mic className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                        <p>No voice notes yet</p>
+                    {pendingVoiceNotes.length === 0 && (
+                      <div className="text-center py-12 text-slate-500">
+                        <CheckCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                        <p>All voice notes reviewed!</p>
                       </div>
                     )}
                   </div>
                 </ScrollArea>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Quick Actions */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="space-y-6"
+          >
+            <Card className="border-0 shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Link to={createPageUrl('ManageModules')}>
+                  <Button variant="outline" className="w-full justify-start">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Manage Modules
+                  </Button>
+                </Link>
+                <Link to={createPageUrl('VoiceVault')}>
+                  <Button variant="outline" className="w-full justify-start">
+                    <Mic className="w-4 h-4 mr-2" />
+                    View Voice Vault
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-sm bg-gradient-to-br from-violet-50 to-indigo-50">
+              <CardContent className="p-5">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-full bg-violet-500 flex items-center justify-center flex-shrink-0">
+                    <Award className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-900 mb-1">Engagement Tip</p>
+                    <p className="text-sm text-slate-600">
+                      Approve voice notes to build a rich community knowledge base
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </motion.div>

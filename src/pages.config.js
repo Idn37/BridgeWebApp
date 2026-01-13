@@ -1,17 +1,19 @@
 import Home from './pages/Home';
+import ManageModules from './pages/ManageModules';
 import ModuleView from './pages/ModuleView';
 import Modules from './pages/Modules';
-import TrainerDashboard from './pages/TrainerDashboard';
-import ManageModules from './pages/ManageModules';
+import AdminDashboard from './pages/AdminDashboard';
+import VoiceVault from './pages/VoiceVault';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Home": Home,
+    "ManageModules": ManageModules,
     "ModuleView": ModuleView,
     "Modules": Modules,
-    "TrainerDashboard": TrainerDashboard,
-    "ManageModules": ManageModules,
+    "AdminDashboard": AdminDashboard,
+    "VoiceVault": VoiceVault,
 }
 
 export const pagesConfig = {

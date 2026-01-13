@@ -13,12 +13,9 @@ import ModuleCard from '@/components/staff/ModuleCard';
 import StreakBanner from '@/components/staff/StreakBanner';
 import BadgeDisplay from '@/components/staff/BadgeDisplay';
 import Leaderboard from '@/components/staff/Leaderboard';
-import VoiceRecorder from '@/components/staff/VoiceRecorder';
 
 export default function Home() {
   const [user, setUser] = useState(null);
-  const [showRecorder, setShowRecorder] = useState(false);
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -77,14 +74,15 @@ export default function Home() {
                 {user?.full_name?.split(' ')[0] || 'Learner'} 👋
               </h1>
             </div>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setShowRecorder(true)}
-              className="w-12 h-12 rounded-full border-violet-200 hover:bg-violet-50"
-            >
-              <Mic className="w-5 h-5 text-violet-600" />
-            </Button>
+            <Link to={createPageUrl('VoiceVault')}>
+              <Button
+                variant="outline"
+                size="icon"
+                className="w-12 h-12 rounded-full border-violet-200 hover:bg-violet-50"
+              >
+                <Mic className="w-5 h-5 text-violet-600" />
+              </Button>
+            </Link>
           </div>
         </motion.div>
 
@@ -193,19 +191,6 @@ export default function Home() {
           </div>
         </motion.section>
       </div>
-
-      {/* Voice Recorder Modal */}
-      <AnimatePresence>
-        {showRecorder && (
-          <VoiceRecorder 
-            onClose={() => setShowRecorder(false)}
-            onSubmit={() => {
-              setShowRecorder(false);
-              queryClient.invalidateQueries(['userProgress']);
-            }}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 }

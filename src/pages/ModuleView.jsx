@@ -280,24 +280,6 @@ export default function ModuleView() {
                   <Play className="w-5 h-5 mr-2" />
                   {isModuleComplete ? 'Review Again' : 'Start Learning'}
                 </Button>
-
-                <div className="flex gap-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowRecorder(true)}
-                    className="flex-1 h-12 rounded-xl border-slate-200"
-                  >
-                    <Mic className="w-4 h-4 mr-2 text-violet-600" />
-                    Voice Note
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="flex-1 h-12 rounded-xl border-slate-200"
-                  >
-                    <Share2 className="w-4 h-4 mr-2 text-slate-600" />
-                    Share
-                  </Button>
-                </div>
               </div>
             </div>
           </motion.div>
