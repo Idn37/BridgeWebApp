@@ -28,7 +28,10 @@ export default function Home() {
 
   const { data: badges = [] } = useQuery({
     queryKey: ['badges'],
-    queryFn: () => base44.entities.Badge.list(),
+    queryFn: async () => {
+      const allBadges = await base44.entities.Badge.list();
+      return allBadges.filter(b => b.name !== 'Module Master');
+    },
   });
 
   const { data: allProgress = [] } = useQuery({
