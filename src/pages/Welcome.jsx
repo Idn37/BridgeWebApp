@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { base44 } from '@/api/base44Client';
-import { BookOpen, Trophy, Mic, Sparkles, ArrowRight } from 'lucide-react';
+import { BookOpen, Trophy, Mic, Sparkles, ArrowRight, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Welcome() {
@@ -10,7 +10,7 @@ export default function Welcome() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col">
       {/* Header */}
       <div className="p-6">
         <motion.div
@@ -18,10 +18,12 @@ export default function Welcome() {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-3"
         >
-          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg">
-            <BookOpen className="w-6 h-6 text-violet-600" />
+          <div className="w-12 h-12 bg-violet-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <Zap className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white">BRIDGE</h1>
+          <div>
+            <h1 className="text-xl font-bold text-white">GTRSG BRIDGE</h1>
+          </div>
         </motion.div>
       </div>
 
@@ -34,13 +36,13 @@ export default function Welcome() {
           className="text-center max-w-md"
         >
           <div className="mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-3xl mb-6">
-              <Sparkles className="w-10 h-10 text-white" />
+            <div className="inline-flex items-center justify-center w-24 h-24 bg-violet-600/20 backdrop-blur-sm rounded-3xl mb-6 border-2 border-violet-500/30">
+              <Sparkles className="w-12 h-12 text-violet-400" />
             </div>
             <h2 className="text-4xl font-bold text-white mb-4">
               Building Real Insights, Driving Growth & Excellence
             </h2>
-            <p className="text-lg text-violet-100">
+            <p className="text-lg text-slate-300">
               Your professional training platform for airport staff excellence
             </p>
           </div>
@@ -57,12 +59,12 @@ export default function Welcome() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 + idx * 0.1 }}
-                className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-2xl p-4"
+                className="flex items-center gap-4 bg-slate-800/50 backdrop-blur-sm rounded-2xl p-4 border border-slate-700/50"
               >
-                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                  <feature.icon className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 bg-violet-600/20 rounded-xl flex items-center justify-center border border-violet-500/30">
+                  <feature.icon className="w-6 h-6 text-violet-400" />
                 </div>
-                <span className="text-white font-medium text-left">{feature.text}</span>
+                <span className="text-slate-200 font-medium text-left">{feature.text}</span>
               </motion.div>
             ))}
           </div>
@@ -75,13 +77,13 @@ export default function Welcome() {
           >
             <Button
               onClick={handleGetStarted}
-              className="w-full h-14 bg-white text-violet-600 hover:bg-violet-50 rounded-2xl text-lg font-semibold shadow-2xl"
+              className="w-full h-14 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 rounded-2xl text-lg font-semibold shadow-2xl shadow-violet-500/20"
             >
               Get Started
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
-            <p className="text-sm text-violet-200 mt-4">
-              Professional training for airport excellence
+            <p className="text-sm text-slate-400 mt-6 italic">
+              "Fast facts in your pocket. Get the gist. Get going."
             </p>
           </motion.div>
         </motion.div>

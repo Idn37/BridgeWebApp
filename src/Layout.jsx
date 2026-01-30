@@ -28,7 +28,7 @@ export default function Layout({ children, currentPageName }) {
   const hideNav = currentPageName === 'ModuleView';
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-900">
       <style>{`
         :root {
           --primary: #8b5cf6;
@@ -40,7 +40,7 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Bottom Navigation - Mobile Optimized */}
       {!hideNav && (
-        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 px-4 py-2 z-40">
+        <nav className="fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 px-4 py-2 z-40">
           <div className="max-w-lg mx-auto">
             <div className="flex items-center justify-around">
               {navItems.map((item) => {
@@ -53,8 +53,8 @@ export default function Layout({ children, currentPageName }) {
                     to={createPageUrl(item.page)}
                     className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all ${
                       isActive 
-                        ? 'text-violet-600' 
-                        : 'text-slate-400 hover:text-slate-600'
+                        ? 'text-violet-400' 
+                        : 'text-slate-500 hover:text-slate-300'
                     }`}
                   >
                     <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5px]' : ''}`} />
@@ -62,7 +62,7 @@ export default function Layout({ children, currentPageName }) {
                       {item.name}
                     </span>
                     {isActive && (
-                      <div className="absolute -bottom-0.5 w-8 h-1 bg-violet-600 rounded-full" />
+                      <div className="absolute -bottom-0.5 w-8 h-1 bg-violet-500 rounded-full" />
                     )}
                   </Link>
                 );

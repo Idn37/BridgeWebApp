@@ -64,7 +64,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
       <div className="max-w-2xl mx-auto px-4 py-6 pb-24">
         {/* Header */}
         <motion.div 
@@ -74,8 +74,8 @@ export default function Home() {
         >
           <div className="flex items-center justify-between mb-1">
             <div>
-              <p className="text-slate-500 text-sm">Welcome back,</p>
-              <h1 className="text-2xl font-bold text-slate-900">
+              <p className="text-slate-400 text-sm">Welcome back,</p>
+              <h1 className="text-2xl font-bold text-white">
                 {user?.full_name?.split(' ')[0] || 'Learner'} 👋
               </h1>
             </div>
@@ -83,9 +83,9 @@ export default function Home() {
               <Button
                 variant="outline"
                 size="icon"
-                className="w-12 h-12 rounded-full border-violet-200 hover:bg-violet-50"
+                className="w-12 h-12 rounded-full border-violet-500/30 bg-slate-800 hover:bg-slate-700"
               >
-                <Mic className="w-5 h-5 text-violet-600" />
+                <Mic className="w-5 h-5 text-violet-400" />
               </Button>
             </Link>
           </div>
@@ -114,11 +114,11 @@ export default function Home() {
             className="mb-8"
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-amber-500" />
+              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-amber-400" />
                 Get Ready For
               </h2>
-              <Link to={createPageUrl('Modules')} className="text-sm text-violet-600 font-medium flex items-center gap-1">
+              <Link to={createPageUrl('Modules')} className="text-sm text-violet-400 font-medium flex items-center gap-1">
                 View all <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
@@ -133,7 +133,7 @@ export default function Home() {
               ))}
             </div>
             <Link to={createPageUrl('Modules')} className="block mt-4">
-              <Button variant="outline" className="w-full h-12 rounded-xl border-violet-200 text-violet-600 hover:bg-violet-50">
+              <Button variant="outline" className="w-full h-12 rounded-xl border-violet-500/30 bg-slate-800 text-violet-400 hover:bg-slate-700">
                 More <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             </Link>
@@ -142,17 +142,17 @@ export default function Home() {
 
         {/* Browse & Leaderboard Tabs */}
         <Tabs defaultValue="browse" className="mb-8">
-          <TabsList className="grid w-full grid-cols-2 bg-slate-100 p-1 rounded-xl">
+          <TabsList className="grid w-full grid-cols-2 bg-slate-800 p-1 rounded-xl">
             <TabsTrigger 
               value="browse" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"
+              className="rounded-lg data-[state=active]:bg-slate-700 data-[state=active]:text-white data-[state=active]:shadow-sm text-slate-400"
             >
               <BookOpen className="w-4 h-4 mr-2" />
               Browse
             </TabsTrigger>
             <TabsTrigger 
               value="leaderboard"
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"
+              className="rounded-lg data-[state=active]:bg-slate-700 data-[state=active]:text-white data-[state=active]:shadow-sm text-slate-400"
             >
               <Trophy className="w-4 h-4 mr-2" />
               Leaderboard
@@ -160,7 +160,7 @@ export default function Home() {
           </TabsList>
 
           <TabsContent value="browse" className="mt-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 mb-4">
               {recentModules.map((module, idx) => (
                 <motion.div
                   key={module.id}
@@ -177,6 +177,11 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
+            <Link to={createPageUrl('Modules')} className="block">
+              <Button variant="outline" className="w-full h-12 rounded-xl border-slate-600 text-slate-300 hover:bg-slate-800 bg-slate-900/50">
+                More <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </Link>
           </TabsContent>
 
           <TabsContent value="leaderboard" className="mt-4">
@@ -191,12 +196,12 @@ export default function Home() {
           transition={{ delay: 0.3 }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-slate-900">Your Badges</h2>
-            <span className="text-sm text-slate-500">
+            <h2 className="text-lg font-semibold text-white">Your Badges</h2>
+            <span className="text-sm text-slate-400">
               {userProgress?.badges?.length || 0}/{badges.length} earned
             </span>
           </div>
-          <div className="bg-white rounded-2xl border border-slate-100 p-4">
+          <div className="bg-slate-800 rounded-2xl border border-slate-700 p-4">
             <BadgeDisplay badges={badges} earnedBadgeIds={userProgress?.badges || []} />
           </div>
         </motion.section>
