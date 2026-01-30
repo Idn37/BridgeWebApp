@@ -41,7 +41,7 @@ export default function Home() {
     queryFn: () => base44.entities.UserProgress.list('-total_points', 20),
   });
 
-  const { data: userProgress } = useQuery({
+  const { data: userProgress, refetch: refetchProgress } = useQuery({
     queryKey: ['userProgress', user?.email],
     queryFn: async () => {
       if (!user?.email) return null;
@@ -49,6 +49,7 @@ export default function Home() {
       return results[0] || null;
     },
     enabled: !!user?.email,
+    refetchInterval: 3000, // Auto-refresh every 3 seconds to ensure latest data
   });
 
   const upcomingModules = modules.filter(m => 
