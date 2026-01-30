@@ -72,7 +72,7 @@ export default function ModuleCard({ module, onClick, progress = 0 }) {
             </div>
           </div>
           
-          {progress > 0 && (
+          {progress !== undefined && (
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
                 <span className="text-xs text-slate-500">Progress</span>
