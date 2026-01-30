@@ -32,10 +32,13 @@ export default function ManageModules() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAdminAuthenticated');
+    if (!isAuthenticated) {
+      window.location.href = createPageUrl('AdminAuth');
+      return;
+    }
+    
     base44.auth.me().then(u => {
-      if (u?.role !== 'admin') {
-        window.location.href = '/';
-      }
       setUser(u);
     }).catch(() => {
       base44.auth.redirectToLogin();
