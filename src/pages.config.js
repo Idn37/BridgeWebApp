@@ -54,6 +54,7 @@ import ModuleView from './pages/ModuleView';
 import Modules from './pages/Modules';
 import VoiceVault from './pages/VoiceVault';
 import Welcome from './pages/Welcome';
+import Landing from './pages/Landing';
 import __Layout from './Layout.jsx';
 
 
@@ -65,6 +66,7 @@ export const PAGES = {
     "Modules": Modules,
     "VoiceVault": VoiceVault,
     "Welcome": Welcome,
+    "Landing": Landing,
 }
 
 export const pagesConfig = {

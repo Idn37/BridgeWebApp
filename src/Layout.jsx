@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { Home, BookOpen, Trophy, Settings, Users } from 'lucide-react';
+import { Home, BookOpen, Trophy, Settings, Users, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const staffNavItems = [
   { name: 'Home', icon: Home, page: 'Home' },
@@ -16,6 +17,7 @@ const trainerNavItems = [
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -24,8 +26,10 @@ export default function Layout({ children, currentPageName }) {
   const isTrainer = user?.role === 'admin';
   const navItems = isTrainer ? trainerNavItems : staffNavItems;
   
-  // Hide nav on module view page for immersive experience
+  // Hide nav and header on specific pages
   const hideNav = currentPageName === 'ModuleView';
+  const hideHeader = currentPageName === 'Welcome' || currentPageName === 'Landing';
+  const showBackButton = currentPageName !== 'Home' && currentPageName !== 'Welcome' && currentPageName !== 'Landing';
 
   return (
     <div className="min-h-screen bg-slate-900">
@@ -35,6 +39,33 @@ export default function Layout({ children, currentPageName }) {
           --primary-dark: #7c3aed;
         }
       `}</style>
+      
+      {/* Header with Back/Home buttons */}
+      {!hideHeader && (
+        <div className="fixed top-0 right-0 p-4 z-50 flex gap-2">
+          {showBackButton && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate(-1)}
+              className="w-10 h-10 rounded-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 hover:bg-slate-700"
+            >
+              <ArrowLeft className="w-5 h-5 text-slate-300" />
+            </Button>
+          )}
+          {currentPageName !== 'Home' && (
+            <Link to={createPageUrl('Home')}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="w-10 h-10 rounded-full bg-slate-800/80 backdrop-blur-sm border border-slate-700 hover:bg-slate-700"
+              >
+                <Home className="w-5 h-5 text-slate-300" />
+              </Button>
+            </Link>
+          )}
+        </div>
+      )}
       
       {children}
 
