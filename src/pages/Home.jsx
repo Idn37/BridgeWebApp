@@ -18,7 +18,9 @@ export default function Home() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    base44.auth.me().then(setUser).catch(() => {
+      base44.auth.redirectToLogin();
+    });
   }, []);
 
   const { data: modules = [] } = useQuery({
@@ -130,6 +132,11 @@ export default function Home() {
                 </Link>
               ))}
             </div>
+            <Link to={createPageUrl('Modules')} className="block mt-4">
+              <Button variant="outline" className="w-full h-12 rounded-xl border-violet-200 text-violet-600 hover:bg-violet-50">
+                More <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </Link>
           </motion.section>
         )}
 
