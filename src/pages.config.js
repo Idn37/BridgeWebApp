@@ -47,28 +47,28 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import AdminAuth from './pages/AdminAuth';
 import AdminDashboard from './pages/AdminDashboard';
 import Home from './pages/Home';
+import Landing from './pages/Landing';
 import ManageModules from './pages/ManageModules';
 import ModuleView from './pages/ModuleView';
 import Modules from './pages/Modules';
 import VoiceVault from './pages/VoiceVault';
 import Welcome from './pages/Welcome';
-import Landing from './pages/Landing';
-import AdminAuth from './pages/AdminAuth';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "AdminAuth": AdminAuth,
     "AdminDashboard": AdminDashboard,
     "Home": Home,
+    "Landing": Landing,
     "ManageModules": ManageModules,
     "ModuleView": ModuleView,
     "Modules": Modules,
     "VoiceVault": VoiceVault,
     "Welcome": Welcome,
-    "Landing": Landing,
-    "AdminAuth": AdminAuth,
 }
 
 export const pagesConfig = {

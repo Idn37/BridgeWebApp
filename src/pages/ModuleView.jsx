@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Play, Clock, BookOpen, Calendar, Mic, CheckCircle, Share2 } from 'lucide-react';
 import { format } from 'date-fns';
 
-import DeckSwiper from '@/components/staff/DeckSwiper';
+import FlashCardDeck from '@/components/staff/FlashCardDeck';
 import VoiceRecorder from '@/components/staff/VoiceRecorder';
 
 export default function ModuleView() {
@@ -303,13 +303,10 @@ export default function ModuleView() {
               <div className="w-10" />
             </div>
 
-            {/* Deck Swiper */}
-            <DeckSwiper 
+            {/* FlashCard Deck */}
+            <FlashCardDeck 
               decks={decks} 
               onComplete={handleComplete}
-              onDeckView={(deckId) => {
-                // Optional: Track individual deck views
-              }}
             />
           </motion.div>
         )}
