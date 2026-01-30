@@ -232,24 +232,24 @@ export default function ModuleView() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-3 bg-emerald-50 border border-emerald-200 rounded-xl p-4"
+                  className="flex items-center gap-3 bg-emerald-900/30 border border-emerald-500/30 rounded-xl p-4"
                 >
-                  <CheckCircle className="w-5 h-5 text-emerald-600" />
-                  <span className="text-emerald-800 font-medium">You've completed this module!</span>
+                  <CheckCircle className="w-5 h-5 text-emerald-400" />
+                  <span className="text-emerald-300 font-medium">You've completed this module!</span>
                 </motion.div>
               )}
 
               {/* Description */}
               <div>
-                <h2 className="text-lg font-semibold text-slate-900 mb-2">About this module</h2>
-                <p className="text-slate-600 leading-relaxed">
+                <h2 className="text-lg font-semibold text-white mb-2">About this module</h2>
+                <p className="text-slate-300 leading-relaxed">
                   {module.description || 'Get ready for your upcoming training session with these bite-sized building blocks. Each card contains key concepts and takeaways to help you prepare.'}
                 </p>
               </div>
 
               {/* What you'll learn */}
               <div>
-                <h2 className="text-lg font-semibold text-slate-900 mb-3">What you'll learn</h2>
+                <h2 className="text-lg font-semibold text-white mb-3">What you'll learn</h2>
                 <div className="space-y-2">
                   {decks.slice(0, 4).map((deck, idx) => (
                     <motion.div
@@ -257,16 +257,16 @@ export default function ModuleView() {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: idx * 0.05 }}
-                      className="flex items-center gap-3 bg-white rounded-lg p-3 border border-slate-100"
+                      className="flex items-center gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700"
                     >
-                      <div className="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center">
-                        <span className="text-sm font-bold text-violet-600">{idx + 1}</span>
+                      <div className="w-8 h-8 rounded-lg bg-violet-600/30 flex items-center justify-center">
+                        <span className="text-sm font-bold text-violet-400">{idx + 1}</span>
                       </div>
-                      <span className="text-slate-700">{deck.title}</span>
+                      <span className="text-slate-200">{deck.title}</span>
                     </motion.div>
                   ))}
                   {decks.length > 4 && (
-                    <p className="text-sm text-slate-500 pl-11">+ {decks.length - 4} more blocks</p>
+                    <p className="text-sm text-slate-400 pl-11">+ {decks.length - 4} more blocks</p>
                   )}
                 </div>
               </div>
