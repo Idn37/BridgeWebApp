@@ -1,12 +1,72 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { base44 } from '@/api/base44Client';
-import { BookOpen, Trophy, Mic, Sparkles, ArrowRight, Zap } from 'lucide-react';
+import { BookOpen, Trophy, Mic, Sparkles, ArrowRight, Zap, LayoutDashboard } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 
 export default function Welcome() {
-  const handleGetStarted = () => {
-    base44.auth.redirectToLogin(window.location.origin);
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => {});
+  }, []);
+
+  const handleGetStarted = async () => {
+    if (!user?.email) {
+      base44.auth.redirectToLogin(window.location.origin);
+      return;
+    }
+
+    // Update streak once per day when visiting the app
+    try {
+      const results = await base44.entities.UserProgress.filter({ user_email: user.email });
+      const userProgress = results[0];
+      const today = new Date().toISOString().split('T')[0];
+
+      if (userProgress) {
+        // Only update if last activity was not today
+        if (userProgress.last_activity_date !== today) {
+          let newStreak = userProgress.current_streak || 0;
+          const lastDate = userProgress.last_activity_date ? new Date(userProgress.last_activity_date) : null;
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          
+          if (lastDate && lastDate.toISOString().split('T')[0] === yesterday.toISOString().split('T')[0]) {
+            newStreak += 1;
+          } else if (!lastDate) {
+            newStreak = 1;
+          } else {
+            newStreak = 1; // Reset if missed a day
+          }
+
+          await base44.entities.UserProgress.update(userProgress.id, {
+            current_streak: newStreak,
+            longest_streak: Math.max(newStreak, userProgress.longest_streak || 0),
+            last_activity_date: today,
+          });
+        }
+      } else {
+        // Create new progress record if doesn't exist
+        await base44.entities.UserProgress.create({
+          user_email: user.email,
+          user_name: user.full_name,
+          modules_completed: [],
+          current_streak: 1,
+          longest_streak: 1,
+          last_activity_date: today,
+          total_points: 0,
+          badges: [],
+          decks_viewed: [],
+        });
+      }
+    } catch (error) {
+      console.error('Failed to update streak:', error);
+    }
+
+    navigate(createPageUrl('Home'));
   };
 
   return (
@@ -87,6 +147,16 @@ export default function Welcome() {
             </p>
           </motion.div>
         </motion.div>
+      </div>
+
+      {/* Dashboard Button - Bottom Right */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <Button
+          onClick={() => navigate(createPageUrl('AdminAuth'))}
+          className="w-16 h-16 rounded-full bg-slate-800/80 backdrop-blur-sm border-2 border-slate-700 hover:bg-slate-700 shadow-2xl"
+        >
+          <LayoutDashboard className="w-7 h-7 text-slate-300" />
+        </Button>
       </div>
     </div>
   );

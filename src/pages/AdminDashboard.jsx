@@ -10,7 +10,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { 
   Users, BookOpen, Mic, TrendingUp, 
   CheckCircle, Clock, Play, ChevronRight, Flame,
-  Eye, MessageSquare, Award, BarChart3, Check, X
+  Eye, MessageSquare, Award, BarChart3, Check, X, ArrowLeft
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
@@ -365,6 +365,12 @@ export default function AdminDashboard() {
                   <Button variant="outline" className="w-full justify-start">
                     <Mic className="w-4 h-4 mr-2" />
                     View Voice Vault
+                  </Button>
+                </Link>
+                <Link to={createPageUrl('Welcome')}>
+                  <Button variant="outline" className="w-full justify-start">
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Exit Dashboard
                   </Button>
                 </Link>
               </CardContent>
