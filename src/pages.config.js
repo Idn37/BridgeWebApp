@@ -55,6 +55,7 @@ import Modules from './pages/Modules';
 import VoiceVault from './pages/VoiceVault';
 import Welcome from './pages/Welcome';
 import Landing from './pages/Landing';
+import AdminAuth from './pages/AdminAuth';
 import __Layout from './Layout.jsx';
 
 
@@ -67,6 +68,7 @@ export const PAGES = {
     "VoiceVault": VoiceVault,
     "Welcome": Welcome,
     "Landing": Landing,
+    "AdminAuth": AdminAuth,
 }
 
 export const pagesConfig = {
