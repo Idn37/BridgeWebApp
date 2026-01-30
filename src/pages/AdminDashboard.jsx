@@ -21,7 +21,14 @@ export default function AdminDashboard() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    base44.auth.me().then(u => {
+      if (u?.role !== 'admin') {
+        window.location.href = '/';
+      }
+      setUser(u);
+    }).catch(() => {
+      base44.auth.redirectToLogin();
+    });
   }, []);
 
   const { data: modules = [] } = useQuery({

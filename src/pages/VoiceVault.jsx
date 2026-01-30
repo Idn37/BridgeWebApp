@@ -16,7 +16,9 @@ export default function VoiceVault() {
   const [selectedModule, setSelectedModule] = useState('all');
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    base44.auth.me().then(setUser).catch(() => {
+      base44.auth.redirectToLogin();
+    });
   }, []);
 
   const { data: approvedVoiceNotes = [] } = useQuery({

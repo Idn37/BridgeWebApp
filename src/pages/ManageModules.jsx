@@ -28,7 +28,19 @@ export default function ManageModules() {
   const [showDeckDialog, setShowDeckDialog] = useState(false);
   const [selectedModuleId, setSelectedModuleId] = useState(null);
   const [editingDeck, setEditingDeck] = useState(null);
+  const [user, setUser] = useState(null);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    base44.auth.me().then(u => {
+      if (u?.role !== 'admin') {
+        window.location.href = '/';
+      }
+      setUser(u);
+    }).catch(() => {
+      base44.auth.redirectToLogin();
+    });
+  }, []);
 
   const { data: modules = [] } = useQuery({
     queryKey: ['allModules'],
