@@ -28,6 +28,11 @@ export default function Home() {
     queryFn: () => base44.entities.Module.filter({ is_published: true }, '-session_date'),
   });
 
+  const { data: allDecks = [] } = useQuery({
+    queryKey: ['allDecks'],
+    queryFn: () => base44.entities.Deck.list(),
+  });
+
   const { data: badges = [] } = useQuery({
     queryKey: ['badges'],
     queryFn: async () => {
@@ -59,9 +64,15 @@ export default function Home() {
   const recentModules = modules.slice(0, 6);
 
   const getModuleProgress = (moduleId) => {
-    if (!userProgress?.decks_viewed) return 0;
-    // Simple progress calculation
-    return userProgress.modules_completed?.includes(moduleId) ? 100 : 0;
+    if (userProgress?.modules_completed?.includes(moduleId)) return 100;
+    
+    const moduleDecks = allDecks.filter(d => d.module_id === moduleId);
+    if (moduleDecks.length === 0) return 0;
+    
+    const viewedDecks = userProgress?.decks_viewed || [];
+    const viewedCount = moduleDecks.filter(d => viewedDecks.includes(d.id)).length;
+    
+    return Math.round((viewedCount / moduleDecks.length) * 100);
   };
 
   return (
