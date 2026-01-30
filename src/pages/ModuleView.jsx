@@ -176,7 +176,7 @@ export default function ModuleView() {
   const isModuleComplete = userProgress?.modules_completed?.includes(moduleId);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-900">
       <AnimatePresence mode="wait">
         {!showDecks ? (
           <motion.div
@@ -289,17 +289,17 @@ export default function ModuleView() {
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 100 }}
-            className="h-screen flex flex-col bg-slate-50"
+            className="h-screen flex flex-col bg-slate-900"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-white">
+            <div className="flex items-center justify-between p-4 border-b border-slate-700 bg-slate-800">
               <button 
                 onClick={() => setShowDecks(false)}
-                className="w-10 h-10 rounded-full hover:bg-slate-100 flex items-center justify-center"
+                className="w-10 h-10 rounded-full hover:bg-slate-700 flex items-center justify-center"
               >
-                <ArrowLeft className="w-5 h-5" />
+                <ArrowLeft className="w-5 h-5 text-white" />
               </button>
-              <h2 className="font-semibold text-slate-900">{module.title}</h2>
+              <h2 className="font-semibold text-white">{module.title}</h2>
               <div className="w-10" />
             </div>
 

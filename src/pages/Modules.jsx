@@ -57,7 +57,7 @@ export default function Modules() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
       <div className="max-w-2xl mx-auto px-4 py-6 pb-24">
         {/* Header */}
         <motion.div 
@@ -65,8 +65,8 @@ export default function Modules() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-2xl font-bold text-slate-900 mb-1">Training Modules</h1>
-          <p className="text-slate-500">Browse all available learning content</p>
+          <h1 className="text-2xl font-bold text-white mb-1">Training Modules</h1>
+          <p className="text-slate-400">Browse all available learning content</p>
         </motion.div>
 
         {/* Search */}
@@ -76,12 +76,12 @@ export default function Modules() {
           transition={{ delay: 0.1 }}
           className="relative mb-4"
         >
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
           <Input
             placeholder="Search modules..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-12 h-12 rounded-xl border-slate-200 bg-white"
+            className="pl-12 h-12 rounded-xl border-slate-700 bg-slate-800 text-white placeholder:text-slate-500"
           />
         </motion.div>
 
@@ -99,8 +99,8 @@ export default function Modules() {
                 onClick={() => setActiveCategory(cat.value)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   activeCategory === cat.value
-                    ? 'bg-violet-600 text-white shadow-lg shadow-violet-200'
-                    : 'bg-white border border-slate-200 text-slate-600 hover:border-violet-200'
+                    ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/20'
+                    : 'bg-slate-800 border border-slate-700 text-slate-300 hover:border-violet-500/30'
                 }`}
               >
                 {cat.label}
@@ -110,7 +110,7 @@ export default function Modules() {
         </motion.div>
 
         {/* Results count */}
-        <p className="text-sm text-slate-500 mb-4">
+        <p className="text-sm text-slate-400 mb-4">
           {filteredModules.length} module{filteredModules.length !== 1 ? 's' : ''} found
         </p>
 
@@ -135,11 +135,11 @@ export default function Modules() {
 
         {filteredModules.length === 0 && (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="w-8 h-8 text-slate-400" />
+            <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="w-8 h-8 text-slate-600" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-1">No modules found</h3>
-            <p className="text-slate-500">Try adjusting your search or filters</p>
+            <h3 className="text-lg font-semibold text-white mb-1">No modules found</h3>
+            <p className="text-slate-400">Try adjusting your search or filters</p>
           </div>
         )}
       </div>

@@ -61,7 +61,7 @@ export default function VoiceVault() {
   }));
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 pb-24">
       <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Header */}
         <motion.div
@@ -71,13 +71,13 @@ export default function VoiceVault() {
         >
           <div className="flex items-center gap-3 mb-4">
             <Link to={createPageUrl('Home')}>
-              <button className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors">
-                <ArrowLeft className="w-5 h-5 text-slate-600" />
+              <button className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center hover:bg-slate-700 transition-colors">
+                <ArrowLeft className="w-5 h-5 text-slate-300" />
               </button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">Voice Vault</h1>
-              <p className="text-sm text-slate-500">Community learning insights</p>
+              <h1 className="text-2xl font-bold text-white">Voice Vault</h1>
+              <p className="text-sm text-slate-400">Community learning insights</p>
             </div>
           </div>
 
@@ -111,7 +111,7 @@ export default function VoiceVault() {
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors whitespace-nowrap ${
                   selectedModule === 'all'
                     ? 'bg-violet-600 text-white'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                    : 'bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700'
                 }`}
               >
                 All ({approvedVoiceNotes.length})
@@ -123,7 +123,7 @@ export default function VoiceVault() {
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors whitespace-nowrap ${
                     selectedModule === module.id
                       ? 'bg-violet-600 text-white'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                      : 'bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700'
                   }`}
                 >
                   {module.name} ({module.count})
@@ -147,36 +147,36 @@ export default function VoiceVault() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
             >
-              <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+              <Card className="bg-slate-800 border border-slate-700 shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-5">
                   <div className="flex items-start gap-4 mb-4">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center flex-shrink-0">
                       <User className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-slate-900">
+                      <p className="font-semibold text-white">
                         {note.contributor_name || 'Anonymous Contributor'}
                       </p>
                       <div className="flex items-center gap-3 mt-1">
-                        <Badge variant="outline" className="text-xs bg-violet-50 text-violet-700 border-violet-200">
+                        <Badge variant="outline" className="text-xs bg-violet-600/20 text-violet-400 border-violet-500/30">
                           {getModuleName(note.module_id)}
                         </Badge>
-                        <span className="text-xs text-slate-500 flex items-center gap-1">
+                        <span className="text-xs text-slate-400 flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
                           {format(new Date(note.created_date), 'MMM d, yyyy')}
                         </span>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-medium text-slate-600">
+                      <div className="text-sm font-medium text-slate-400">
                         {note.duration_seconds}s
                       </div>
                     </div>
                   </div>
 
                   {note.transcript && (
-                    <div className="mb-4 p-4 bg-slate-50 rounded-xl">
-                      <p className="text-sm text-slate-700 italic">
+                    <div className="mb-4 p-4 bg-slate-900 rounded-xl border border-slate-700">
+                      <p className="text-sm text-slate-300 italic">
                         "{note.transcript}"
                       </p>
                     </div>
@@ -195,10 +195,10 @@ export default function VoiceVault() {
 
           {filteredNotes.length === 0 && (
             <div className="text-center py-16">
-              <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                <Mic className="w-8 h-8 text-slate-400" />
+              <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-4">
+                <Mic className="w-8 h-8 text-slate-600" />
               </div>
-              <p className="text-slate-500 font-medium mb-1">No voice notes yet</p>
+              <p className="text-white font-medium mb-1">No voice notes yet</p>
               <p className="text-sm text-slate-400">
                 {selectedModule === 'all' 
                   ? 'Be the first to share your insights!'

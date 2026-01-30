@@ -148,7 +148,7 @@ export default function ManageModules() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 pb-24">
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Header */}
         <motion.div
@@ -157,8 +157,8 @@ export default function ManageModules() {
           className="flex items-center justify-between mb-8"
         >
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-1">Manage Modules</h1>
-            <p className="text-slate-500">Create and edit training content</p>
+            <h1 className="text-3xl font-bold text-white mb-1">Manage Modules</h1>
+            <p className="text-slate-400">Create and edit training content</p>
           </div>
           <Button
             onClick={() => {
@@ -184,7 +184,7 @@ export default function ManageModules() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
               >
-                <Card className="border-0 shadow-sm overflow-hidden">
+                <Card className="bg-slate-800 border border-slate-700 shadow-sm overflow-hidden">
                   <div className="flex">
                     {/* Thumbnail */}
                     <div className="w-32 h-32 flex-shrink-0">

@@ -99,7 +99,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 pb-24">
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <motion.div
@@ -107,8 +107,8 @@ export default function AdminDashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-bold text-slate-900 mb-1">Admin Dashboard</h1>
-          <p className="text-slate-500">Monitor staff engagement and manage content</p>
+          <h1 className="text-3xl font-bold text-white mb-1">Admin Dashboard</h1>
+          <p className="text-slate-400">Monitor staff engagement and manage content</p>
         </motion.div>
 
         {/* Stats Grid */}
@@ -129,38 +129,38 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card className="bg-slate-800 border border-slate-700 shadow-sm">
             <CardContent className="p-5">
               <div className="flex items-center justify-between mb-3">
-                <BookOpen className="w-8 h-8 text-emerald-500" />
+                <BookOpen className="w-8 h-8 text-emerald-400" />
               </div>
-              <p className="text-3xl font-bold text-slate-900">{totalCompletions}</p>
-              <p className="text-slate-500 text-sm">Module Completions</p>
+              <p className="text-3xl font-bold text-white">{totalCompletions}</p>
+              <p className="text-slate-400 text-sm">Module Completions</p>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card className="bg-slate-800 border border-slate-700 shadow-sm">
             <CardContent className="p-5">
               <div className="flex items-center justify-between mb-3">
-                <Flame className="w-8 h-8 text-orange-500" />
+                <Flame className="w-8 h-8 text-orange-400" />
               </div>
-              <p className="text-3xl font-bold text-slate-900">{avgStreak}</p>
-              <p className="text-slate-500 text-sm">Avg. Streak Days</p>
+              <p className="text-3xl font-bold text-white">{avgStreak}</p>
+              <p className="text-slate-400 text-sm">Avg. Streak Days</p>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card className="bg-slate-800 border border-slate-700 shadow-sm">
             <CardContent className="p-5">
               <div className="flex items-center justify-between mb-3">
-                <Mic className="w-8 h-8 text-violet-500" />
+                <Mic className="w-8 h-8 text-violet-400" />
                 {pendingVoiceNotes.length > 0 && (
-                  <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-medium">
+                  <span className="text-xs bg-amber-900/50 text-amber-400 px-2 py-1 rounded-full font-medium border border-amber-700/50">
                     {pendingVoiceNotes.length} pending
                   </span>
                 )}
               </div>
-              <p className="text-3xl font-bold text-slate-900">{voiceNotes.length}</p>
-              <p className="text-slate-500 text-sm">Voice Notes</p>
+              <p className="text-3xl font-bold text-white">{voiceNotes.length}</p>
+              <p className="text-slate-400 text-sm">Voice Notes</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -173,11 +173,11 @@ export default function AdminDashboard() {
             transition={{ delay: 0.2 }}
             className="lg:col-span-2"
           >
-            <Card className="border-0 shadow-sm">
+            <Card className="bg-slate-800 border border-slate-700 shadow-sm">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Mic className="w-5 h-5 text-violet-500" />
+                  <CardTitle className="text-lg flex items-center gap-2 text-white">
+                    <Mic className="w-5 h-5 text-violet-400" />
                     Voice Notes Manager
                   </CardTitle>
                 </div>
@@ -347,9 +347,9 @@ export default function AdminDashboard() {
             transition={{ delay: 0.3 }}
             className="space-y-6"
           >
-            <Card className="border-0 shadow-sm">
+            <Card className="bg-slate-800 border border-slate-700 shadow-sm">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Quick Actions</CardTitle>
+                <CardTitle className="text-lg text-white">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <Link to={createPageUrl('ManageModules')}>
@@ -367,15 +367,15 @@ export default function AdminDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-sm bg-gradient-to-br from-violet-50 to-indigo-50">
+            <Card className="bg-slate-800 border border-slate-700 shadow-sm">
               <CardContent className="p-5">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-violet-500 flex items-center justify-center flex-shrink-0">
                     <Award className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">Engagement Tip</p>
-                    <p className="text-sm text-slate-600">
+                    <p className="font-semibold text-white mb-1">Engagement Tip</p>
+                    <p className="text-sm text-slate-300">
                       Approve voice notes to build a rich community knowledge base
                     </p>
                   </div>
@@ -392,10 +392,10 @@ export default function AdminDashboard() {
           transition={{ delay: 0.4 }}
           className="mt-6"
         >
-          <Card className="border-0 shadow-sm">
+          <Card className="bg-slate-800 border border-slate-700 shadow-sm">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-violet-500" />
+              <CardTitle className="text-lg flex items-center gap-2 text-white">
+                <BarChart3 className="w-5 h-5 text-violet-400" />
                 Module Engagement
               </CardTitle>
             </CardHeader>
@@ -411,14 +411,14 @@ export default function AdminDashboard() {
                     <div key={module.id} className="space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <span className="text-sm font-medium text-slate-900 truncate max-w-xs">
+                          <span className="text-sm font-medium text-white truncate max-w-xs">
                             {module.title}
                           </span>
-                          <span className="text-xs text-slate-400">{deckCount} blocks</span>
+                          <span className="text-xs text-slate-500">{deckCount} blocks</span>
                         </div>
-                        <span className="text-sm font-semibold text-slate-900">{engagementPercent}%</span>
+                        <span className="text-sm font-semibold text-white">{engagementPercent}%</span>
                       </div>
-                      <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${engagementPercent}%` }}
