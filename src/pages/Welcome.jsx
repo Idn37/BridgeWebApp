@@ -82,7 +82,7 @@ export default function Welcome() {
             <Zap className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">GTRSG BRIDGE</h1>
+            <h1 className="text-xl font-bold text-white">GTRSG BRIDGING TRAINING</h1>
           </div>
         </motion.div>
       </div>
@@ -103,7 +103,7 @@ export default function Welcome() {
               Building Real Insights, Driving Growth & Excellence
             </h2>
             <p className="text-lg text-slate-300">
-              Your professional training platform for airport staff excellence
+              Your professional bite-sized training platform.
             </p>
           </div>
 
