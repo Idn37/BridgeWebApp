@@ -50,7 +50,6 @@
 import AdminAuth from './pages/AdminAuth';
 import AdminDashboard from './pages/AdminDashboard';
 import Home from './pages/Home';
-import Landing from './pages/Landing';
 import ManageModules from './pages/ManageModules';
 import ModuleView from './pages/ModuleView';
 import Modules from './pages/Modules';
@@ -63,7 +62,6 @@ export const PAGES = {
     "AdminAuth": AdminAuth,
     "AdminDashboard": AdminDashboard,
     "Home": Home,
-    "Landing": Landing,
     "ManageModules": ManageModules,
     "ModuleView": ModuleView,
     "Modules": Modules,
@@ -72,7 +70,7 @@ export const PAGES = {
 }
 
 export const pagesConfig = {
-    mainPage: "Landing",
+    mainPage: "AdminAuth",
     Pages: PAGES,
     Layout: __Layout,
 };
