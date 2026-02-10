@@ -15,7 +15,7 @@ export default function AdminAuth() {
     e.preventDefault();
     
     // Simple password check - you can change this password
-    if (password === 'admin123') {
+    if (password === 'admingtrbridge2236') {
       localStorage.setItem('isAdminAuthenticated', 'true');
       navigate(createPageUrl('AdminDashboard'));
     } else {
@@ -72,9 +72,7 @@ export default function AdminAuth() {
           </Button>
         </form>
 
-        <p className="text-center text-slate-500 text-sm mt-6">
-          Default password: admin123
-        </p>
+
       </motion.div>
     </div>
   );
